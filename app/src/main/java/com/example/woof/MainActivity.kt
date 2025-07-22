@@ -53,9 +53,9 @@ class MainActivity : ComponentActivity() {
 fun WoofApp(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
-            WoofTopAppBar(modifier = Modifier)
+            WoofTopAppBar()
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) { it ->
         LazyColumn(contentPadding = it) {
             items(dogs) {
