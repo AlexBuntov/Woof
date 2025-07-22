@@ -3,10 +3,8 @@ package com.example.woof
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,9 +72,9 @@ fun WoofApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DogItem(
+private fun DogItem(
     dog: Dog,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val color by animateColorAsState(
@@ -85,18 +83,10 @@ fun DogItem(
         label = "Color card",
     )
     Card(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
-            modifier = Modifier
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium,
-                    )
-                )
-                .background(color)
-
+            modifier = Modifier.background(color),
         ) {
             Row(
                 modifier = Modifier
@@ -111,15 +101,18 @@ fun DogItem(
                     onClick = { expanded = !expanded },
                 )
             }
-            if (expanded) DogHobby(
-                dogHobby = dog.hobbies,
-                modifier = Modifier.padding(
-                    top = dimensionResource(R.dimen.padding_small),
-                    bottom = dimensionResource(R.dimen.padding_medium),
-                    start = dimensionResource(R.dimen.padding_medium),
-                    end = dimensionResource(R.dimen.padding_medium),
+            AnimatedVisibility(
+                visible = expanded,
+            ) {
+                DogHobby(
+                    dogHobby = dog.hobbies, modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                        .padding(
+                            top = dimensionResource(R.dimen.padding_small),
+                            end = dimensionResource(R.dimen.padding_medium),
+                        )
                 )
-            )
+            }
         }
     }
 }
@@ -127,7 +120,7 @@ fun DogItem(
 
 @Preview
 @Composable
-fun WoofPreview() {
+private fun WoofPreview() {
     WoofTheme(darkTheme = false) {
         WoofApp(modifier = Modifier)
     }
